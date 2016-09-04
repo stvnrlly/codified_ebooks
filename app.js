@@ -1,8 +1,9 @@
 'use strict';
 
-var natural = require('natural');
-var fs = require('fs');
-var Twit = require('twit');
+const natural = require('natural');
+const fs = require('fs');
+const Twit = require('twit');
+const argv = require('minimist')(process.argv.slice(2));
 require('dotenv').config();
 
 var T = new Twit({
@@ -44,12 +45,16 @@ function build(dict) {
 }
 
 function tweet(text) {
-  T.post('statuses/update', {
-    status: text
-  }, function(err, data, response) {
-    if (err) {
-      console.log(err);
-    }
-    // console.log(data);
-  });
+  if (argv.test) {
+    console.log(text);
+  } else {
+    T.post('statuses/update', {
+      status: text
+    }, function(err, data, response) {
+      if (err) {
+        console.log(err);
+      }
+      // console.log(data);
+    });
+  }
 }
